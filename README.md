@@ -5,4 +5,4 @@ You probably want to go either:
 - [The demo for the Speakeasy module](TBD/)
 - [The GitHub page for the Speakeasy module](https://github.com/speakeasyjs/speakeasy)
 
-Shoutout to Red Hat OpenShift for the PaaS hosting.
+Shoutout to Heroku for the PaaS hosting.
