@@ -1,0 +1,115 @@
+doctype html
+html(lang='en')
+  head
+    title Speakeasy Demo
+    script(type='text/javascript',src='https://code.jquery.com/jquery-2.1.4.min.js')
+    link(type='text/css',rel='stylesheet',href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css')
+    link(rel='stylesheet', href='//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.0.0/styles/tomorrow.min.css')
+    script(src='//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.0.0/highlight.min.js')
+    script(type='text/javascript').
+      hljs.configure({
+        languages: ['js']
+      })
+      var updateTimer = function() {
+        // Get current time seconds
+        var sec = new Date().getSeconds();
+        
+        // Fire if clock has struck 0 or 30
+        if (sec == 0 || sec == 30) {
+          updateToken();
+        } else {
+          var secsToNext = 0;
+          // If less than 30, next update is at 30
+          if (sec < 30) {
+            secsToNext = 30 - sec;
+          } else if (sec > 30) {
+            secsToNext = 60 - sec;
+          }
+          $('.update').text('Updating in ' + secsToNext + '...')
+        }
+      }
+      var updateToken = function() {
+        $.get('token?secret=' + $('#secret').text(), function( data ) {
+          $('#token').text(data);
+          $('.update').text('Updated.')
+        });
+      }
+      $(document).ready(function() {
+        $('pre').each(function(i, block) {
+          hljs.highlightBlock(block);
+        });
+        $('#verify_button').click(function() {
+          $.get('verify?secret=' + $('#secret').text() + '&token=' + $('#token_input').val(), function( data ) {
+            $('#verify_result').text(data);
+          });
+        })
+      });
+      setInterval(updateTimer, 500)
+    style(type='text/css').
+      pre {
+        overflow: auto;
+        word-wrap: normal;
+        white-space: pre;
+      }
+  body
+    .container
+      .row
+        .col-md-12
+          h1 Speakeasy Demo
+      .row
+        .col-md-4
+          h2 Secret Key
+          h3 Sample Code
+          pre.
+            var speakeasy = require('speakeasy');
+            var QRCode = require('qrcode');
+            
+            var secret = speakeasy.generateSecret({length: 20});
+            console.log(secret.base32); // secret of length 20
+            
+            QRCode.toDataURL(secret.otpauth_url, function(err, data_url) {
+              console.log(data_url); // get QR code data URL
+            });
+        .col-md-4
+          h2 Generated Token
+          h3 Sample Code
+          pre.
+            // Get the token at the current time
+            // Here, we specify base32 encoding
+            
+            var token = speakeasy.totp({
+              secret: secret.base32,
+              encoding: 'base32'
+            });
+
+            console.log(token);
+        .col-md-4
+          h2 Verify Token
+          h3 Sample Code
+          pre.
+            var userToken = params.get('token'); // Verify the token the user gives
+            
+            var verified = speakeasy.totp.verify({
+              secret: secret.base32,
+              encoding: 'base32',
+              token: userToken
+            });
+            
+            console.log(verified);
+      .row
+        .col-md-4
+          p
+            strong Secret (base 32 format):
+          p#secret= secret.base32
+          img(src=qrPath, style='display: block; width: 200px;', width="200")
+          p Scan this in to Google Authenticator or another two-factor authentication app.
+        .col-md-4
+          p#token(style='font-size: 30pt; font-family: Monaco, Inconsolata, Consolas, Helvetica, sans-serif;')=token
+          p
+            small.update Updating...
+        .col-md-4
+          p
+            input#token_input(type='text', style='font-size: 30pt; font-family: Monaco, Inconsolata, Consolas, Helvetica, sans-serif; width: 155px;', placeholder='000000')
+          p
+            input#verify_button(type='button', value='Verify')
+          p#verify_result

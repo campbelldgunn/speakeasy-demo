@@ -1,0 +1,16 @@
+{
+  "name": "speakeasy-demo",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "./node_modules/nodemon/bin/nodemon.js server.js"
+  },
+  "dependencies": {
+    "express": "^4.13.3",
+    "pug": "^2.0.4",
+    "qr-image": "^3.1.0",
+    "speakeasy": "^2.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.1"
+  }
+}
