@@ -47,6 +47,6 @@ function verifyToken(secret, token) {
   return speakeasy.time.verify({secret: secret, encoding: 'base32', token: token})
 }
 
-var port = process.env.NODEJS_PORT || 8081
-    , ip = process.env.NODEJS_IP || "127.0.0.1";
+//var port = process.env.NODEJS_PORT || 80
+//    , ip = process.env.NODEJS_IP || "127.0.0.1";
 app.listen(port, ip);

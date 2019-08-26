@@ -2,7 +2,8 @@
   "name": "speakeasy-demo",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "./node_modules/nodemon/bin/nodemon.js server.js"
+    "local-start": "./node_modules/nodemon/bin/nodemon.js server.js",
+    "start": "node server.js"
   },
   "dependencies": {
     "express": "^4.13.3",
