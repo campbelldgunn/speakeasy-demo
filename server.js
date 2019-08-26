@@ -47,6 +47,10 @@ function verifyToken(secret, token) {
   return speakeasy.time.verify({secret: secret, encoding: 'base32', token: token})
 }
 
-//var port = process.env.NODEJS_PORT || 80
-//    , ip = process.env.NODEJS_IP || "127.0.0.1";
-app.listen(port, ip);
+// set the port of our application
+// process.env.PORT lets the port be set by Heroku
+let port = process.env.PORT || 8081
+
+app.listen(port, function() {
+  console.log("Our app is running on http://localhost:" + port);
+});
